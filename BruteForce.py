@@ -34,8 +34,6 @@ def solve_knapsack(profits, weights, capacity):
     dp = [[-1 for x in range(capacity + 1)] for y in range(length)]
     results = knapsack_recursive(dp, profits, weights, capacity, 0, [])
     selected_items = []
-    print("recursive")
-    print(dp)
     w = capacity
     n = len(profits)
     res = dp[n][capacity]
@@ -43,9 +41,8 @@ def solve_knapsack(profits, weights, capacity):
         if dp[i][w] != dp[i - 1][w]:
             selected_items.append(i - 1)
             w -= weights[i - 1]
-    print('selected')
-    print(selected_items)
     return results
+
 
 def knapsack_recursive(dp, profits, weights, capacity, currentIndex, choices):
     # base case checks
@@ -79,6 +76,7 @@ def knapsack_recursive(dp, profits, weights, capacity, currentIndex, choices):
         return dp[currentIndex][capacity], choices2
     # dp[currentIndex][capacity] = max(profit1, profit2)
 
+
 def knapsack(weight, value, max_weight):
     n = len(weight)
     dp = [[0] * (max_weight + 1) for _ in range(n + 1)]
@@ -96,8 +94,6 @@ def knapsack(weight, value, max_weight):
         if dp[i][w] != dp[i - 1][w]:
             selected_items.append(i)
             w -= weight[i - 1]
-            print(weight[i - 1])
-    print(w)
 
     selected_items.reverse()
     return dp[n][max_weight], selected_items
@@ -138,16 +134,22 @@ def read_dataset(dataset):
             profits.append(profit)
 
     start = time.time()
-    max_value, selected_items = knapsack(prices, profits, 500*100)
+    max_value, selected_items = knapsack(prices, profits, 500 * 100)
+    # max_value, selected_items = solve(prices, profits, 500)
     end = time.time()
-    print(max_value, selected_items)
-    execTime = end - start
-    print("exec time dataset1:" + str(execTime))
+    #print(max_value, selected_items)
+    exec_time = end - start
+    print("exec time of " + dataset + ": " + str(exec_time))
 
     total = 0
     for i in selected_items:
-        print(names[i-1])
-        total += prices[i-1]
+        print(names[i - 1])
+        total += prices[i - 1]
+    total /= 100
+    performance = round((max_value / total) * 100, 2)
+    print("total price: " + str(total))
+    print("gain: " + str(max_value))
+    print("performance: " + str(performance) + "%")
 
 
 def main():
@@ -157,23 +159,20 @@ def main():
     price = pd.to_numeric(data["Coût par action (en euros)"])
     profit = (percentage * price) / 100
 
-    #start = time.time()
-    #solution, choices = solve(profit, price, 500)
-    #end = time.time()
-
-    #print(choices)
-    #print(solution)
-    #execTime = end - start
-    #print("exec time:" + str(execTime))
-
-    print(list(profit))
-    print(list(price))
-
     start = time.time()
-    print(solve_knapsack(profit, price, 500))
+    solution, choices = solve(profit, price, 500)
     end = time.time()
+
+    print(choices)
+    print(solution)
     execTime = end - start
     print("exec time:" + str(execTime))
+
+    # start = time.time()
+    # print(solve_knapsack(profit, price, 500))
+    # end = time.time()
+    # execTime = end - start
+    # print("exec time:" + str(execTime))
 
     start = time.time()
     max_value, selected_items = knapsack(price, profit, 500)
@@ -182,38 +181,34 @@ def main():
     execTime = end - start
     print("exec time knapsack:" + str(execTime))
 
-    data = pd.read_csv('dataset1_Python+P7.csv')
-    prices = []
-    profits = []
-    names = []
-    for index, row in data.iterrows():
-        if float(row["price"]) > 0:
-            names.append(row["name"])
-            current_price = int(float(row["price"]) * 100)
-            prices.append(current_price)
-            profit = (float(row["profit"]) * float(row["price"])) / 100
-            profits.append(profit)
+    # data = pd.read_csv('dataset1_Python+P7.csv')
+    # prices = []
+    # profits = []
+    # names = []
+    # for index, row in data.iterrows():
+    #    if float(row["price"]) > 0:
+    #        names.append(row["name"])
+    #        current_price = int(float(row["price"]) * 100)
+    #        prices.append(current_price)
+    #        profit = (float(row["profit"]) * float(row["price"])) / 100
+    #        profits.append(profit)
 
-    start = time.time()
-    max_value, selected_items = knapsack(prices, profits, 500*100)
-    end = time.time()
-    print(max_value, selected_items)
-    execTime = end - start
-    print("exec time dataset1:" + str(execTime))
+    # start = time.time()
+    # max_value, selected_items = knapsack(prices, profits, 500*100)
+    # end = time.time()
+    # print(max_value, selected_items)
+    # execTime = end - start
+    # print("exec time dataset1:" + str(execTime))
 
-    total = 0
-    for i in selected_items:
-        print(names[i-1])
-        total += prices[i-1]
+    # total = 0
+    # for i in selected_items:
+    #    print(names[i-1])
+    #    total += prices[i-1]
 
-    print(total/100)
+    # print(total/100)
 
+    read_dataset('dataset1_Python+P7.csv')
     read_dataset('dataset2_Python+P7.csv')
 
-
-
-
-
-    # print(knapsack_recursive_with_items(price, profit, 500, 20))
 
 main()
