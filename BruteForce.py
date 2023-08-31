@@ -124,6 +124,32 @@ def knapsack_recursive_with_items(price, profit, max_weight, n):
         return value_without_item, selected_items_without
 
 
+def read_dataset(dataset):
+    data = pd.read_csv(dataset)
+    prices = []
+    profits = []
+    names = []
+    for index, row in data.iterrows():
+        if float(row["price"]) > 0:
+            names.append(row["name"])
+            current_price = int(float(row["price"]) * 100)
+            prices.append(current_price)
+            profit = (float(row["profit"]) * float(row["price"])) / 100
+            profits.append(profit)
+
+    start = time.time()
+    max_value, selected_items = knapsack(prices, profits, 500*100)
+    end = time.time()
+    print(max_value, selected_items)
+    execTime = end - start
+    print("exec time dataset1:" + str(execTime))
+
+    total = 0
+    for i in selected_items:
+        print(names[i-1])
+        total += prices[i-1]
+
+
 def main():
     # améliorer l'affichage
     data = pd.read_csv('actions.csv')
@@ -181,6 +207,8 @@ def main():
         total += prices[i-1]
 
     print(total/100)
+
+    read_dataset('dataset2_Python+P7.csv')
 
 
 
