@@ -1,4 +1,4 @@
-# R-solvez-des-probl-mes-en-utilisant-des-algorithmes-en-Python
+# Résolvez des problèmes en utilisant des algorithmes en Python
 ## Utilisation des algorithmes
 
 1 - Installer Python 3 et git
